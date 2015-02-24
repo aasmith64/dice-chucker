@@ -1,0 +1,362 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain) */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,  figure, figcaption, footer, header, hgroup,  menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; }
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+/* End RESET */
+
+
+
+/* FONT Declarations ---------*/
+body {
+	font-family: 'Cuprum', sans-serif;
+	font-weight: 400;
+}
+
+b, strong {
+	font-weight: 700;
+}
+
+em, i {
+	font-style: italic;
+}
+
+button, 
+h1, h2, h3, h4, h5, h6, 
+th, 
+.config_valid-error, .input_valid-error {
+	font-family: 'Signika', sans-serif;
+	font-weight: 600;
+}
+
+
+
+/*Color Scheme Index ----------
+----HIGHLIGHT GREEN:    #BADA55
+		background-color    [ button:active, ::selection, header, th, 
+                          .input-set, .tr--odd ];
+    box-shadow          [ input:focus ];
+----
+    WARNING/ERROR RED:  #FF5555
+    box-shadow          [ :invalid ];
+    color               [ :invalid, .config_valid-error, 
+                          .input_valid-error ];
+----
+    BLACK:              #000000
+    border-color        [ header, section, .minus, .plus ];
+----
+    DARK GREY:          #333333
+    color               [ body, button, input ];
+----
+    MIDDLE GREY:        #888888
+    background-color    [ .minus:active, .plus:active, 
+                          .accordion__bar:hover::after ];
+    border-color        [ button, h1, h2, h3, h4, h5, h6, input,
+                          table, tbody, td, thead, th, tr,
+                          .accordion__bar::after ];
+    color               [ .accordion__bar:active::after ];
+----
+    LIGHT GREY:         #CCCCCC
+    background-color    [ .accordion--closed ];
+----
+    VERY LIGHT GREY:    #D8D8D8
+    background-color    [ .accordion__bar:hover ];
+----
+    WHITE:              #FFFFFF
+    background-color    [ .accordion__bar:active::after, 
+                          .minus, .plus ];
+    color               [ .accordion__bar:hover::after, 
+                          .minus:active, .plus:active ];
+-------------------------------*/
+
+
+
+/*ELEMENT Tags ----------------*/
+body { 
+	color: #333333;
+}
+
+button {
+	background: none;
+	border-color: #888888;
+	color: #333333;
+	font-size: 0.85em;
+	margin: 0.25em 0.25em 0.25em 0em;
+	padding: 0.3em;
+}
+button:hover {
+	cursor: pointer;
+}
+button:active {
+	background-color: #BADA55;
+}
+
+form {
+	margin: 10px;
+}
+
+h1, h2, h3 {
+	border-color: #888888;
+	border-style: outset;
+}
+
+h1 {
+	border-width: 5px 0;
+	font-size: 1.7em;
+	line-height: 1em;
+	padding: 0.1em 0;
+}
+
+h2 {
+	border-width: 3px 0;
+	font-size: 1.4em;
+	letter-spacing: 0.1em;
+	line-height: 1.4em;
+	margin-bottom: 0.5em;
+	padding: 0 0.5em;
+}
+
+h3 {
+	border-width: 2px 0;
+	font-size: 1.2em;
+	line-height: 1.3em;
+	margin-bottom: 0.5em;
+	padding: 0 0.5em 0 1.25em;
+}
+
+header {
+	background-color: #BADA55;
+}
+header, section {
+	border: solid 1px #000000;
+	padding: 0.75em;
+}
+
+input {
+	border: inset 1px #888888;
+	color: #333333;
+}
+/*number input spinner hiding*/
+input[type=number] {
+	-moz-appearance: textfield;
+}
+::-webkit-inner-spin-button { 
+	-webkit-appearance: none;
+}
+::-webkit-outer-spin-button { 
+	-webkit-appearance: none;
+}
+input:focus {
+	outline: none; /*clear the blue glow*/
+	box-shadow: 0 0 3px 2px #BADA55;
+}
+
+li {
+	margin: 0 0 0.25em;
+}
+
+ol {
+	list-style-type: decimal;
+	margin: 0 1em 0.5em 2em;
+}
+
+p {
+	text-indent: 1em;
+	line-height: 1.4em;
+	margin: 0 0.5em 0.5em;
+}
+
+::selection {
+	background-color: #BADA55;
+}
+
+table, tbody, thead, tr, th, td {
+	border: solid 2px #888888;
+}
+td {
+	border-style: dotted;
+}
+td, th, tr {
+	border-width: 1px;
+}
+
+td, th {
+	min-width: 4em;
+	padding: 0.25em;
+}
+
+th {
+	background-color: #BADA55;
+}
+
+ul {
+	margin: 0 1em 0.5em 2.5em;
+}
+
+
+
+/*CLASS Tags ------------------*/
+.accordion__bar {
+	cursor: pointer;
+}
+.accordion__bar::after {
+	border-color: #888888;
+	border-style: solid;
+	border-width: 0 2px;
+	content: "~";
+	float: right;
+	height: 1em;
+	line-height: 1em;
+	margin: 4px 0;
+	padding: 0 0.25em;
+	text-align: center;
+	width: 0.5em;
+}
+.accordion__bar:hover {
+	background-color: #D8D8D8;
+	border-style: inset;
+}
+
+.accordion__bar:hover::after {
+	background-color: #888888;
+	color: #FFFFFF;
+}
+.accordion__bar:active::after {
+	background-color: #FFFFFF;
+	color: #888888;
+}
+.accordion__bar--closed::after {
+	content: "+";
+}
+
+.accordion--closed {
+	background-color: #CCCCCC;
+	box-shadow: 0px 0px 3px inset;
+	padding-bottom: 0;
+	overflow: hidden;
+}
+
+.button--roll {
+	bottom: -20px;
+	height: 50px;
+	left: 7px;
+	position: relative;
+	width: 50px;
+}
+
+.clear-both {
+	clear: both;
+}
+
+.config__li--check {
+	text-indent:-2.5em;
+}
+
+.config-input--num {
+	width: 3em;
+}
+
+.config_valid-error {
+	color: #FF5555;
+}
+
+.hidden {
+	display: none;
+}
+
+.input-set {
+	background-color: #BADA55;
+	float: left;
+	padding: 5px;
+	position: relative;
+	width: 70px;
+}
+
+.input-set__lbl {
+	display: block;
+	font-size: 1.1em;
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+.input_valid-error {
+	color: #FF5555;
+}
+
+:invalid {
+	box-shadow: 0 0 3px 1px #FF5555 inset;
+	color: #FF5555;
+}
+
+.minus, .plus {
+	background-color: #FFFFFF;
+	border: solid 1px #000000;
+	display: inline-block;
+	font-size: 20px;
+	height: 19px;
+	line-height: 13px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	right: 4px;
+	text-align: center;
+	width: 19px;
+}
+.minus {
+	bottom: 5px;
+}
+.plus {
+	bottom: 26px;
+}
+.minus:hover, .plus:hover {
+	cursor: pointer;
+}
+.minus:active, .plus:active {
+	background-color: #888888;
+	color: #FFFFFF;
+}
+
+.output-list--arg {
+	display: inline-block;
+	text-align: right;
+	text-indent: 0;
+}
+
+.results__th-lbl {
+	border-width: 1px 2px;
+	border-style: solid;
+	text-align: right;
+}
+
+.roll-input {
+	display: inline-block;
+	font-size: 1.4em;
+	height: 40px;
+	text-align: right;
+	width: 50px;
+}
+
+.scroll-x {
+	overflow-x: scroll;
+}
+
+.tr--odd {
+	background-color: #BADA55;
+}
+
+/*ID Tags -----------------------*/
+/*#wrapper {
+	width: 320px; /*phone*/
+}*/
+
+
+
+/*Media Queries -----------------*/
+/*pending*/
