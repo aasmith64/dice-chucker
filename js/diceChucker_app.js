@@ -1,36 +1,41 @@
 //Dice Chucker app rigging
 
-//declare global variables with defaults
-//variable values updated by ("#roll-input__btn").click(),
+//declare app object with defaults
+//values updated by ('#dc-roll-input__btn').click(),
 //and by keyup 'enter' events from the roll-input inputs
-var newRoll        = {}; //new diceRoll() object
-var historyStorage = []; //store up to 50 newRolls
+
+var dcApp                    = {}; //namespace object
+    dcApp.newInput           = {}; //input values to feed new diceRoll() params
+    dcApp.config             = {}; //configuration settings for results/history display
+    dcApp.errors             = {}; //error validation storage
+    dcApp.newRoll            = {}; //will be new diceRoll() object
+    dcApp.historyStorage     = []; //store up to 50 dcApp.newRoll 's
 
 //default roll inputs
-var newRollQty   = 1;
-var newRollSides = 6;
-var newRollMod   = 0;
+    dcApp.newInput.qty       = 1;
+    dcApp.newInput.sides     = 6;
+    dcApp.newInput.mod       = 0;
 
-//default config for display of newRoll results
-var config_sum          = true;
-var config_mean         = false;
-var config_sortedH      = true;
-var config_sortedL      = false;
-var config_series       = false;
-var config_skim         = false;
-var config_skimVal      = 1;
-var config_dredge       = false;
-var config_dredgeVal    = 1;
-var config_truncate     = false;
-var config_truncateVal  = 1;
-var config_history      = true;
-var config_historyVal   = 5;
+//default config for display of dcApp.newRoll results
+    dcApp.config.sum         = true;
+    dcApp.config.mean        = false;
+    dcApp.config.sortedH     = true;
+    dcApp.config.sortedL     = false;
+    dcApp.config.series      = false;
+    dcApp.config.skim        = false;
+    dcApp.config.skimVal     = 1;
+    dcApp.config.dredge      = false;
+    dcApp.config.dredgeVal   = 1;
+    dcApp.config.truncate    = false;
+    dcApp.config.truncateVal = 1;
+    dcApp.config.history     = true;
+    dcApp.config.historyVal  = 5;
 
-//validation defaults - see function validateInputs()
-var inputErrorRoll      = false; //true prevents roll
-var inputErrorRollMsg   = "";    //and will prep and display msg
-var inputErrorConfig    = false; //true prevents update functions
-var inputErrorConfigMsg = "";    //and will prep and display msg
+//validation defaults - see function dc_validateInputs()
+    dcApp.errors.RollFlag    = false; //true prevents roll
+    dcApp.errors.RollMsg     = "";    //and will prep and display msg
+    dcApp.errors.ConfigFlag  = false; //true prevents update functions
+    dcApp.errors.ConfigMsg   = "";    //and will prep and display msg
 
 
 
@@ -41,12 +46,12 @@ $(document).ready(function() {
 //prepare system functions
 
 //call for testing input values for roll and config
-function validateInputs() {
+function dc_validateInputs() {
 	//reset flags
-	inputErrorRoll      = false; //true prevents roll
-	inputErrorRollMsg   = "";    //and will prep and display msg
-	inputErrorConfig    = false; //true prevents update functions
-	inputErrorConfigMsg = "";    //and will prep and display msg
+	dcApp.errors.RollFlag   = false; //true prevents roll
+	dcApp.errors.RollMsg    = "";    //and will prep and display msg
+	dcApp.errors.ConfigFlag = false; //true prevents update functions
+	dcApp.errors.ConfigMsg  = "";    //and will prep and display msg
 	
 	//jquery select any invalid inputs - HTML5
 	$('input:invalid').each(function() {
@@ -54,11 +59,11 @@ function validateInputs() {
 		//and loads a suitable msg snippet to appropriate msg var
 		//from element's html data-errormsg attr
 		if ($(this).hasClass("roll-input")) {
-			inputErrorRoll       = true;
-			inputErrorRollMsg   += $(this).attr("data-errormsg");
+			dcApp.errors.RollFlag  = true;
+			dcApp.errors.RollMsg  += $(this).attr("data-errormsg");
 		} else { //is config input
-			inputErrorConfig     = true;
-			inputErrorConfigMsg += $(this).attr("data-errormsg");
+			dcApp.errors.ConfigFlag  = true;
+			dcApp.errors.ConfigMsg  += $(this).attr("data-errormsg");
 		}
 		
 		//focus cursor on invalid input
@@ -68,93 +73,93 @@ function validateInputs() {
 }
 
 
-//generate valid roll and add it to historyStorage
+//generate valid roll and add it to dcApp.historyStorage
 function chuckDice() {
-    if (inputErrorRoll) { //log error
-        $('.input_valid-error').text(inputErrorRollMsg);
+    if (dcApp.errors.RollFlag) { //log error
+        $('.dc-input__valid-error').text(dcApp.errors.RollMsg);
         
-    } else { // (!inputErrorRoll)
-        $('.input_valid-error').text(""); //clear error log
+    } else { // (!dcApp.errors.RollFlag)
+        $('.dc-input__valid-error').text(""); //clear error log
         
         //get and store current input vals
-        newRollQty   = parseInt($("#input-qty_val")  .val());
-        newRollSides = parseInt($("#input-sides_val").val());
-        newRollMod   = parseInt($("#input-mod_val")  .val());
+        dcApp.newInput.qty   = parseInt($('#input-qty_val')  .val());
+        dcApp.newInput.sides = parseInt($('#input-sides_val').val());
+        dcApp.newInput.mod   = parseInt($('#input-mod_val')  .val());
         
-        //generate roll, also put it in historyStorage
-        newRoll = new diceRoll(newRollSides, newRollQty);
+        //generate roll, also put it in dcApp.historyStorage
+        dcApp.newRoll = new diceRoll(dcApp.newInput.sides, dcApp.newInput.qty);
         
-        historyStorage.unshift([newRoll, newRollMod]);
-        if (historyStorage.length > 50) {
-            historyStorage.pop();   //enforce max limit for Log
+        dcApp.historyStorage.unshift([dcApp.newRoll, dcApp.newInput.mod]);
+        if (dcApp.historyStorage.length > 50) {
+            dcApp.historyStorage.pop();   //enforce max limit for Log
         }
     }
 }
 
 //when called, update the Roll Results table
-function updateResults() {
-	if (inputErrorConfig) { //log error
-			$('.config_valid-error').text(inputErrorConfigMsg);
-    } else { // (!inputErrorConfig)
-		$('.config_valid-error').text(""); //clear error log
+function dc_updateResults() {
+	if (dcApp.errors.ConfigFlag) { //log error
+			$('.dc-config__valid-error').text(dcApp.errors.ConfigMsg);
+	} else { // (!dcApp.errors.ConfigFlag)
+		$('.dc-config__valid-error').text(""); //clear error log
 		
 		//build Input report
-		var resultInput  = "<i>Qty</i>: " + newRoll.qty;
-			resultInput += "<br><i>Sides</i>: " + newRoll.sides;
-			resultInput += "<br><i>Mod</i>: "
-			if (newRollMod > 0) {
+		var resultInput  = '<i class="dc-txt__i">Qty</i>: ' + dcApp.newRoll.qty;
+		    resultInput += '<br><i class="dc-txt__i">Sides</i>: ' + dcApp.newRoll.sides;
+		    resultInput += '<br><i class="dc-txt__i">Mod</i>: '
+			if (dcApp.newInput.mod > 0) {
 				resultInput += "+";
 			}
-			resultInput += newRollMod;
+			resultInput += dcApp.newInput.mod;
             
-		$('#results__cell--input')      .html(resultInput);
-		$('#results__cell--sum')        .text(newRoll.sum()
-		                                      + newRollMod);
-		$('#results__cell--mean')       .text((newRoll.mean()
-		                                       + (newRollMod/newRoll.qty)).toFixed(3));
+		$('#dc-results__cell--input')      .html(resultInput);
+		$('#dc-results__cell--sum')        .text(dcApp.newRoll.sum()
+		                                      + dcApp.newInput.mod);
+		$('#dc-results__cell--mean')       .text((dcApp.newRoll.mean()
+		                                       + (dcApp.newInput.mod/dcApp.newRoll.qty)).toFixed(3));
 		                                         //round to 3 decimal points
-        $('#results__cell--sorted-high').text(newRoll.sortedH.join(', '));
-        $('#results__cell--sorted-low') .text(newRoll.sortedL.join(', '));
-        $('#results__cell--series')     .text(newRoll.series.join(', '));
-        updateSkim();
-        updateDredge();
-	    updateTruncate();
-    }
+	        $('#dc-results__cell--sorted-high').text(dcApp.newRoll.sortedH.join(', '));
+	        $('#dc-results__cell--sorted-low') .text(dcApp.newRoll.sortedL.join(', '));
+	        $('#dc-results__cell--series')     .text(dcApp.newRoll.series.join(', '));
+	        dc_updateSkim();
+	        dc_updateDredge();
+		dc_updateTruncate();
+	}
 }
-function updateSkim() { //component of updateResults, also called separately by event
+function dc_updateSkim() { //component of dc_updateResults, also called separately by event
 	var n = parseInt($('#skim_val').val());
-	$('#results__cell--skim').text(newRoll.skim(n).join(', '));
+	$('#dc-results__cell--skim').text(dcApp.newRoll.skim(n).join(', '));
 }
-function updateDredge() { //component of updateResults, also called separately by event
+function dc_updateDredge() { //component of dc_updateResults, also called separately by event
 	var n = parseInt($('#dredge_val').val());
-	$('#results__cell--dredge').text(newRoll.dredge(n).join(', '));
+	$('#dc-results__cell--dredge').text(dcApp.newRoll.dredge(n).join(', '));
 }
-function updateTruncate() { //component of updateResults, also called separately by event
+function dc_updateTruncate() { //component of dc_updateResults, also called separately by event
 	var n = parseInt($('#truncate_val').val());
-	$('#results__cell--truncate').text(newRoll.truncate(n).join(', '));
+	$('#dc-results__cell--truncate').text(dcApp.newRoll.truncate(n).join(', '));
 }
 
 //when called, build contents of History table and update it
-function updateHistory() {
-	if (inputErrorConfig) { //log error
-		$('.config_valid-error').text(inputErrorConfigMsg);
-	} else { // (!inputErrorConfig)
-		$('.config_valid-error').text(""); //clear error log
+function dc_updateHistory() {
+	if (dcApp.errors.ConfigFlag) { //log error
+		$('.dc-config__valid-error').text(dcApp.errors.ConfigMsg);
+	} else { // (!dcApp.errors.ConfigFlag)
+		$('.dc-config__valid-error').text(""); //clear error log
 	    
 		//grab config settings
-		config_sum         = $('#sum')        .is(':checked');
-		config_mean        = $('#mean')       .is(':checked');
-		config_sortedH     = $('#sorted-high').is(':checked');
-		config_sortedL     = $('#sorted-low') .is(':checked');
-		config_series      = $('#series')     .is(':checked');
-		config_skim        = $('#skim')       .is(':checked');
-		config_dredge      = $('#dredge')     .is(':checked');
-		config_truncate    = $('#truncate')   .is(':checked');
-		config_history     = $('#historylog') .is(':checked');
-		config_skimVal     = parseInt($('#skim_val')    .val());
-		config_dredgeVal   = parseInt($('#dredge_val')  .val());
-		config_truncateVal = parseInt($('#truncate_val').val());
-		config_historyVal  = parseInt($('#history_val') .val());
+		dcApp.config.sum         = $('#sum')        .is(':checked');
+		dcApp.config.mean        = $('#mean')       .is(':checked');
+		dcApp.config.sortedH     = $('#sorted-high').is(':checked');
+		dcApp.config.sortedL     = $('#sorted-low') .is(':checked');
+		dcApp.config.series      = $('#series')     .is(':checked');
+		dcApp.config.skim        = $('#skim')       .is(':checked');
+		dcApp.config.dredge      = $('#dredge')     .is(':checked');
+		dcApp.config.truncate    = $('#truncate')   .is(':checked');
+		dcApp.config.history     = $('#historylog') .is(':checked');
+		dcApp.config.skimVal     = parseInt($('#skim_val')    .val());
+		dcApp.config.dredgeVal   = parseInt($('#dredge_val')  .val());
+		dcApp.config.truncateVal = parseInt($('#truncate_val').val());
+		dcApp.config.historyVal  = parseInt($('#history_val') .val());
 		
 		//configObj will be built out,
 		//for...in loops will run -
@@ -165,7 +170,7 @@ function updateHistory() {
 		//assign key/values to configObj based on settings
 		//Input data will always be part of the history
 		//variables record and recordMod set and updated
-		//with for loop through historyStorage below
+		//with for loop through dcApp.historyStorage below
 			configObj["Input"] = function () {
 				//create Input report cell, eg. '3d8+2'
 				var recordInput  = record.qty;
@@ -178,100 +183,100 @@ function updateHistory() {
 				
 				return recordInput;
 			}
-		if (config_sum) {
+		if (dcApp.config.sum) {
 			configObj["Sum"] = function () {
 				return record.sum() + recordMod;
 			}
 		}
-		if (config_mean) {
+		if (dcApp.config.mean) {
 			configObj["Avg"] = function () {
 				return (record.mean() + (recordMod/record.qty)).toFixed(3);
 			}
 		}
-		if (config_sortedH) {
+		if (dcApp.config.sortedH) {
 			configObj["High to Low"] = function () {
 				return record.sortedH.join(', ');
 			}
 		}
-		if (config_sortedL) {
+		if (dcApp.config.sortedL) {
 			configObj["Low to High"] = function () {
 				return record.sortedL.join(', ');
 			}
 		}
-		if (config_series) {
+		if (dcApp.config.series) {
 			configObj["Series"] = function () {
 				return record.series.join(', ');
 			}
 		}
-		if (config_skim) {
+		if (dcApp.config.skim) {
 			configObj["Highest"] = function () {
-				return record.skim(config_skimVal).join(', ');
+				return record.skim(dcApp.config.skimVal).join(', ');
 			}
 		}
-		if (config_dredge) {
+		if (dcApp.config.dredge) {
 			configObj["Lowest"] = function () {
-				return record.dredge(config_dredgeVal).join(', ');
+				return record.dredge(dcApp.config.dredgeVal).join(', ');
 			}
 		}
-		if (config_truncate) {
+		if (dcApp.config.truncate) {
 			configObj["Truncated"] = function () {
-				return record.truncate(config_truncateVal).join(', ');
+				return record.truncate(dcApp.config.truncateVal).join(', ');
 			}
 		}
 	    
 	    
-		if (config_history) { //show history is checked
+		if (dcApp.config.history) { //show history is checked
 			//dump contents of current table
-			$('.history__table').empty();
+			$('.dc-history__table').empty();
 			
 			//build string of table html tags and data,
 			//append at end to only repaint/reflow DOM once
 			var histTableContent = "";
 			
 			//create table head and row
-			histTableContent += "<thead><tr>";
+			histTableContent += '<thead class="dc-history__thead"><tr class="dc-history__tr dc-history__tr--head">';
 			
 			//create th for Input and each checked config item
 			for (var key in configObj) {
-				histTableContent += "<th>" + key + "</th>";
+				histTableContent += '<th class="dc-history__th">' + key + '</th>';
 			}
 			
 			//close table head and row, create table body
-			histTableContent += "</tr></thead>" + "<tbody>";
+			histTableContent += '</tr></thead>' + '<tbody class="dc-history__tbody">';
 			
 			//set loop cap
-			var historyLogCap = config_historyVal;
-			if (historyLogCap > historyStorage.length) {
-				historyLogCap = historyStorage.length;
+			var historyLogCap = dcApp.config.historyVal;
+			if (historyLogCap > dcApp.historyStorage.length) {
+				historyLogCap = dcApp.historyStorage.length;
 			}
 			
-			//loop through historyStorage
+			//loop through dcApp.historyStorage
 			for (var i=0; i<historyLogCap; i++) {
-				var record    = historyStorage[i][0];
-				var recordMod = historyStorage[i][1];
+				var record    = dcApp.historyStorage[i][0];
+				var recordMod = dcApp.historyStorage[i][1];
 				
 				//add row
 				if (i % 2 === 0) { //apply class for evens
-					histTableContent += "<tr class='tr--even'>";
+					histTableContent += '<tr class="dc-history__tr tr--even">';
 				} else { //or odds
-					histTableContent += "<tr class='tr--odd'>";
+					histTableContent += '<tr class="dc-history__tr tr--odd">';
 				}
 				
 				//create cells for Input and each checked config item - run as functions
 				for (var key in configObj) {
 					var value = configObj[key]()
-					histTableContent += "<td>" + value + "</td>";
+					histTableContent += '<td class="dc-history__td">' + value + '</td>';
 				}
 				
 				//close row
-				histTableContent += "</tr>";
+				histTableContent += '</tr>';
 			}
 			
 			//close table body
-			histTableContent += "</tbody>";
+			histTableContent += '</tbody>';
 			
 			//insert all table contents
-			$('.history__table').html(histTableContent);
+			$('.dc-history__table').html(histTableContent);
 		}
 	}
 }
@@ -283,19 +288,19 @@ function updateHistory() {
 
 //.click() EVENTS
 
-//grab inputs and execute newRoll; update results; update history
-$('#roll-input__btn').click(function () {
-	validateInputs(); //check inputs
+//grab inputs and execute dcApp.newRoll; update results; update history
+$('#dc-roll-input__btn').click(function () {
+	dc_validateInputs(); //check inputs
 	chuckDice();      //run diceRoll and store
-	updateResults();  //run updates
-	updateHistory();
+	dc_updateResults();  //run updates
+	dc_updateHistory();
 });
 
 //rig increment/decrement buttons for roll inputs
 //qty +/-, sides +/-, mod +/-
 $('[data-parent]').click(function () {
 	//clear error msg
-	$('.input_valid-error').empty();
+	$('.dc-input__valid-error').empty();
 	
 	//grab input element associated with button, value of
 	var dataParent = $('#' + $(this).attr("data-parent"));
@@ -303,39 +308,39 @@ $('[data-parent]').click(function () {
 	
 	if (inputVal != inputVal) { //NaN validation
 		inputVal = "";
-		$('.input_valid-error').text("*Not a number.");
+		$('.dc-input__valid-error').text("*Not a number.");
 	}
 	
 	//increment or decrement the value
-	if ($(this).hasClass("plus")) {
+	if ($(this).hasClass("dc-roll-input__plus")) {
 		inputVal++;
-	} else if ($(this).hasClass("minus")) {
+	} else if ($(this).hasClass("dc-roll-input__minus")) {
 		inputVal--;
 	}
 	//enforce min/max qty/sides/mod and print error msgs
 	if ( (inputVal < 2) && (dataParent.is("[id*=-sides_]")) ) {
 		inputVal = 2;
-		$('.input_valid-error').text("*Minimum 2 sides.");
+		$('.dc-input__valid-error').text("*Minimum 2 sides.");
 	}
 	if ( (inputVal < 1) && (dataParent.is("[id*=-qty_]")) ) {
 		inputVal = 1;
-		$('.input_valid-error').text("*Minimum 1 dice.");
+		$('.dc-input__valid-error').text("*Minimum 1 dice.");
 	}
 	if ( (inputVal < -99999) && (dataParent.is("[id*=-mod_]")) ) {
 		inputVal = -99999;
-		$('.input_valid-error').text("*Maximum Modifier: -99,999.");
+		$('.dc-input__valid-error').text("*Maximum Modifier: -99,999.");
 	}    
 	if ( (inputVal > 9999) && (dataParent.is("[id*=-sides_]")) ) {
 		inputVal = 9999;
-		$('.input_valid-error').text("*Maximum 9,999 sides.");
+		$('.dc-input__valid-error').text("*Maximum 9,999 sides.");
 	}
 	if ( (inputVal > 999) && (dataParent.is("[id*=-qty_]")) ) {
 		inputVal = 999;
-		$('.input_valid-error').text("*Maximum 999 dice.");
+		$('.dc-input__valid-error').text("*Maximum 999 dice.");
 	}
 	if ( (inputVal > 99999) && (dataParent.is("[id*=-mod_]")) ) {
 		inputVal = 99999;
-		$('.input_valid-error').text("*Maximum Modifier: 99,999.");
+		$('.dc-input__valid-error').text("*Maximum Modifier: 99,999.");
 	}
 	
 	//update new value to input field
@@ -344,15 +349,15 @@ $('[data-parent]').click(function () {
 
 //refresh Roll Results and History with new skim/dredge/truncate/Log vals
 $('#refresh').click(function () {
-	validateInputs(); //check inputs
-	updateResults();  //run updates
-	updateHistory();
+	dc_validateInputs(); //check inputs
+	dc_updateResults();  //run updates
+	dc_updateHistory();
 });
 
-//Clear History button to empty historyStorage
+//Clear History button to empty dcApp.historyStorage
 $('#history-clear').click(function () {
-	historyStorage = [];
-	$('.history__table').empty();
+	dcApp.historyStorage = [];
+	$('.dc-history__table').empty();
 });
 
 //Accordion Sections
@@ -374,11 +379,11 @@ $('.accordion__bar').click(function () {
 //on their table row in Roll Results
 //also toggle 'required' on related val inputs
 $('input[type=checkbox]').change(function () {
-	var selector = '#results__row--' + $(this).val();
+	var selector = '#dc-results__row--' + $(this).val();
 	
 	//exception for history log display
 	if ($(this).val() === "historylog") {
-		selector = '#history';
+		selector = '#dc-history';
 	}
 	
 	$(selector).toggleClass("hidden");
@@ -402,32 +407,32 @@ $('input[type=checkbox]').change(function () {
 $('input').bind('keyup', function (e) {
 	if (e.keyCode === 13) { //Enter Key
 		
-		validateInputs(); //check inputs
+		dc_validateInputs(); //check inputs
 		
 		if ($(this).hasClass("roll-input")) { //input is for roll
 			chuckDice();     //run diceRoll and store
-			updateResults(); //run updates
-			updateHistory();
+			dc_updateResults(); //run updates
+			dc_updateHistory();
 		    
 		} else { //input is from Config panel
-			if (inputErrorConfig) { //log error
-			    $('.config_valid-error').text(inputErrorConfigMsg);
+			if (dcApp.errors.ConfigFlag) { //log error
+			    $('.dc-config__valid-error').text(dcApp.errors.ConfigMsg);
 			
-			} else { // (!inputErrorRoll)
-				$('.config_valid-error').text(""); //clear error log
+			} else { // (!dcApp.errors.ConfigFlag)
+				$('.dc-config__valid-error').text(""); //clear error log
 				
 				switch ($(this).attr("id")) { //identify which
 					case "skim_val":
-						updateSkim(); //refresh Highest x rolls
+						dc_updateSkim(); //refresh Highest x rolls
 						break;
 					case "dredge_val":
-						updateDredge(); //refresh Lowest x rolls
+						dc_updateDredge(); //refresh Lowest x rolls
 						break;
 					case "truncate_val":
-						updateTruncate(); //refresh Truncated rolls
+						dc_updateTruncate(); //refresh Truncated rolls
 						break;
 					case "history_val":
-						updateHistory(); //refresh History Log
+						dc_updateHistory(); //refresh History Log
 						break;
 					default:
 						break;
