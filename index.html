@@ -3,6 +3,7 @@
 <head>
 	<title>Dice Chucker</title>
 	
+	<!-- Stylesheets: Fonts from google, Dice Chucker app css -->
 	<link href='http://fonts.googleapis.com/css?family=Signika:600|Cuprum:400,700,400italic' 
 	      rel='stylesheet' type='text/css'>
 	<link rel='stylesheet' href='css/style.css'/>
@@ -17,150 +18,150 @@
 
 <body>
 
-<div id="wrapper">
+<div id="dc-wrapper" class="dc-wrapper">
 	
-	<header id="header">
-		<h1>Dice Chucker</h1>
+	<header id="dc-header" class="dc-header">
+		<h1 class="dc-header__title">Dice Chucker</h1>
 		
 	</header>
-  
-	<div id="debug" class="hidden">Debug</div>
-  
-	<section id="roll-input">
-		<h2 class="accordion__bar">Input</h2>
+	
+	<div id="dc-debug" class="dc-debug hidden">Debug</div>
+	
+	<section id="dc-roll-input" class="dc-panel__roll-input">
+		<h2 class="dc-panel__title accordion__bar">Input</h2>
 		
-		<div class="input-set">
+		<div class="dc-input-set">
 			<label class="input-set__lbl" for="input-qty_val">Quantity</label>
 			<input id="input-qty_val" class="roll-input" type="number" name="qty" 
 			       value="1" min="1" max="999" step="number" data-errormsg="*Invalid Quantity. " required>
-			<button id="input-qty_minus" class="minus" data-parent="input-qty_val">-</button>
-			<button id="input-qty_plus" class="plus" data-parent="input-qty_val">+</button></div
-		><div class="input-set">
+			<button id="input-qty_minus" class="dc-btn dc-roll-input__minus" data-parent="input-qty_val">-</button>
+			<button id="input-qty_plus" class="dc-btn dc-roll-input__plus" data-parent="input-qty_val">+</button></div
+		><div class="dc-input-set">
 	    	<label class="input-set__lbl" for="input-sides_val">Sides</label>
 			<input id="input-sides_val" class="roll-input" type="number" name="sides" 
 			       value="6" min="2" max="9999" step="number" data-errormsg="*Invalid Sides Value. "required>
-			<button id="input-sides_minus" class="minus" data-parent="input-sides_val">-</button>
-			<button id="input-sides_plus" class="plus" data-parent="input-sides_val">+</button></div
-		><div class="input-set">
+			<button id="input-sides_minus" class="dc-btn dc-roll-input__minus" data-parent="input-sides_val">-</button>
+			<button id="input-sides_plus" class="dc-btn dc-roll-input__plus" data-parent="input-sides_val">+</button></div
+		><div class="dc-input-set">
 			<label class="input-set__lbl" for="input-mod_val">Modifier</label>
 			<input id="input-mod_val" class="roll-input" type="number" name="mod" 
 			       value="0" min="-99999" max="99999" step="number" data-errormsg="*Invalid Modifier. ">
-			<button id="input-mod_minus" class="minus" data-parent="input-mod_val">-</button>
-			<button id="input-mod_plus" class="plus" data-parent="input-mod_val">+</button></div
-		><button id="roll-input__btn" class="button--roll">ROLL</button>
-		<p class="input_valid-error clear-both"></p>
+			<button id="input-mod_minus" class="dc-btn dc-roll-input__minus" data-parent="input-mod_val">-</button>
+			<button id="input-mod_plus" class="dc-btn dc-roll-input__plus" data-parent="input-mod_val">+</button></div
+		><button id="dc-roll-input__btn" class="dc-button--roll">ROLL</button>
+		<p class="dc-input__valid-error clear-both"></p>
 		
 	</section>
   
-	<section id="results">
-		<h2 class="accordion__bar">Roll Results</h2>
+	<section id="dc-results" class="dc-panel__results">
+		<h2 class="dc-panel__title accordion__bar">Roll Results</h2>
 		
-		<table class="results__table">
+		<table class="dc-results__table">
 			<!-- Javascript fills the table cells with results on roll action 
 			     and toggles row visibility based on config -->
 			
-			<tr id="results__row--input">
-				<th class="results__th-lbl" scope="row">Input:</th>
-				<td id="results__cell--input">
-					<i>Qty</i>:   <!-- newRoll.qty    --><br>
-					<i>Sides</i>: <!-- newRoll.sides  --><br>
-					<i>Mod</i>:   <!-- +/- newRollMod -->
+			<tr id="dc-results__row--input" class="dc-results__tr">
+				<th class="dc-results__th" scope="row">Input:</th>
+				<td id="dc-results__cell--input" class="dc-results__td">
+					<i class="dc-txt__i">Qty</i>:   <!-- newRoll.qty    --><br>
+					<i class="dc-txt__i">Sides</i>: <!-- newRoll.sides  --><br>
+					<i class="dc-txt__i">Mod</i>:   <!-- +/- newRollMod -->
 				</td>
 			</tr>
-			<tr id="results__row--sum">
-				<th class="results__th-lbl" scope="row">Sum Total:</th>
-				<td id="results__cell--sum"><!-- newRoll.sum() + mod --></td>
+			<tr id="dc-results__row--sum" class="dc-results__tr">
+				<th class="dc-results__th" scope="row">Sum Total:</th>
+				<td id="dc-results__cell--sum" class="dc-results__td"><!-- newRoll.sum() + mod --></td>
 			</tr>
-			<tr id="results__row--mean" class="hidden">
-				<th class="results__th-lbl" scope="row">Average:</th>
-				<td id="results__cell--mean"><!-- newRoll.mean() + mod/qty --></td>
+			<tr id="dc-results__row--mean" class="dc-results__tr hidden">
+				<th class="dc-results__th" scope="row">Average:</th>
+				<td id="dc-results__cell--mean" class="dc-results__td"><!-- newRoll.mean() + mod/qty --></td>
 			</tr>
-			<tr id="results__row--sorted-high">
-				<th class="results__th-lbl" scope="row">High to Low:</th>
-				<td id="results__cell--sorted-high"><!-- newRoll.sortedH --></td>
+			<tr id="dc-results__row--sorted-high" class="dc-results__tr">
+				<th class="dc-results__th" scope="row">High to Low:</th>
+				<td id="dc-results__cell--sorted-high" class="dc-results__td"><!-- newRoll.sortedH --></td>
 			</tr>
-			<tr id="results__row--sorted-low" class="hidden">
-				<th class="results__th-lbl" scope="row">Low to High:</th>
-				<td id="results__cell--sorted-low"><!-- newRoll.sortedL --></td>
+			<tr id="dc-results__row--sorted-low" class="dc-results__tr hidden">
+				<th class="dc-results__th" scope="row">Low to High:</th>
+				<td id="dc-results__cell--sorted-low" class="dc-results__td"><!-- newRoll.sortedL --></td>
 			</tr>
-			<tr id="results__row--series" class="hidden">
-				<th class="results__th-lbl" scope="row">Series:</th>
-				<td id="results__cell--series"><!-- newRoll.series --></td>
+			<tr id="dc-results__row--series" class="dc-results__tr hidden">
+				<th class="dc-results__th" scope="row">Series:</th>
+				<td id="dc-results__cell--series" class="dc-results__td"><!-- newRoll.series --></td>
 			</tr>
-			<tr id="results__row--skim" class="hidden">
-				<th class="results__th-lbl" scope="row">Highest <i>x</i>:</th>
-				<td id="results__cell--skim"><!-- newRoll.skim(n) --></td>
+			<tr id="dc-results__row--skim" class="dc-results__tr hidden">
+				<th class="dc-results__th" scope="row">Highest <i class="dc-txt__i">x</i>:</th>
+				<td id="dc-results__cell--skim" class="dc-results__td"><!-- newRoll.skim(n) --></td>
 			</tr>
-			<tr id="results__row--dredge" class="hidden">
-				<th class="results__th-lbl" scope="row">Lowest <i>x</i>:</th>
-				<td id="results__cell--dredge"><!-- newRoll.dredge(n) --></td>
+			<tr id="dc-results__row--dredge" class="dc-results__tr hidden">
+				<th class="dc-results__th" scope="row">Lowest <i class="dc-txt__i">x</i>:</th>
+				<td id="dc-results__cell--dredge" class="dc-results__td"><!-- newRoll.dredge(n) --></td>
 			</tr>
-			<tr id="results__row--truncate" class="hidden">
-				<th class="results__th-lbl" scope="row">Truncated:</th>
-				<td id="results__cell--truncate"><!-- newRoll.truncate(n) --></td>
+			<tr id="dc-results__row--truncate" class="dc-results__tr hidden">
+				<th class="dc-results__th" scope="row">Truncated:</th>
+				<td id="dc-results__cell--truncate" class="dc-results__td"><!-- newRoll.truncate(n) --></td>
 			</tr>
 		</table>
 		
 	</section>
 	
-	<section id="history" class="overflow scroll-x">
-		<h2 class="accordion__bar">History</h2>
+	<section id="dc-history" class="dc-panel__history overflow scroll-x">
+		<h2 class="dc-panel__title accordion__bar">History</h2>
 		
-		<table class="history__table">
-            <!-- Javascript updateHistory() function fills
-                 table with results history, dependent on config -->
-            
-            <!-- thead: Header row with labels (Input and up to 8 more) -->
-            <thead>
-                <tr>
-                    <th>Input</th>
-                    <th>Sum</th>
-                    <th>High to Low</th>
-                </tr>
-            </thead>
-            
-            <!-- tbody: up to 50 rows of data, reverse chronological    -->
-            <tbody>
-                <tr>
-                    <td>XdY+Z</td>
-                    <td>N</td>
-                    <td>A,B,C</td>
-                </tr>
-            </tbody>
-        </table>
+		<table class="dc-history__table">
+			<!-- Javascript updateHistory() function fills
+			 table with results history, dependent on config -->
+			
+			<!-- thead: Header row with labels (Input and up to 8 more) -->
+			<thead class="dc-history__thead">
+				<tr class="dc-history__tr dc-history__tr--head">
+					<th class="dc-history__th">Input</th>
+					<th class="dc-history__th">Sum</th>
+					<th class="dc-history__th">High to Low</th>
+				</tr>
+			</thead>
+			
+			<!-- tbody: up to 50 rows of data, reverse chronological    -->
+			<tbody class="dc-history__tbody">
+				<tr class="dc-history__tr tr--even">
+					<td class="dc-history__td">XdY+Z</td>
+					<td class="dc-history__td">N</td>
+					<td class="dc-history__td">A,B,C</td>
+				</tr>
+			</tbody>
+        	</table>
         
 	</section>
 	
-    <section id="configuration">
-        <h2 class="accordion__bar">Configuration</h2>
+	<section id="dc-config" class="dc-panel__config">
+		<h2 class="dc-panel__title accordion__bar">Configuration</h2>
         
-        <form action="">
-            <ul class="config__ul">
-				<li class="config__li--check">
+		<form class="dc-config__form" action="">
+			<ul class="dc-config__ul">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="sum" value="sum" checked>
 					<label for="sum">Sum Total</label></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="mean" value="mean">
 					<label for="mean">Average for Roll</label></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="sorted-high" value="sorted-high" checked>
 					<label for="sorted-high">List High to Low</label></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="sorted-low" value="sorted-low">
 					<label for="sorted-low">List Low to High</label></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="series" value="series">
 					<label for="series">List of Rolls in Series</label></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="skim" value="skim">
-					<label for="skim">Highest <i>x</i> Rolls...</label>
+					<label for="skim">Highest <i class="dc-txt__i">x</i> Rolls...</label>
 					<span class="output-list--arg">
-						<i>x</i> = 
+						<i class="dc-txt__i">x</i> = 
 						<input type="number" name="skim-val"
 						       id="skim_val" class="config-input--num"
 						       value="1" min="1" max="999" step="1"
@@ -168,11 +169,11 @@
 						       aria-label="Amount to Keep (Highest)" required="false">
 					</span></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="dredge" value="dredge">
-					<label for="dredge">Lowest <i>x</i> Rolls...</label>
+					<label for="dredge">Lowest <i class="dc-txt__i">x</i> Rolls...</label>
 					<span class="output-list--arg">
-						<i>x</i> = 
+						<i class="dc-txt__i">x</i> = 
 						<input type="number" name="dredge-val"
 						       id="dredge_val" class="config-input--num"
 						       value="1" min="1" max="999" step="1"
@@ -180,11 +181,11 @@
 						       aria-label="Amount to Keep (Lowest)" required="false">
 					</span></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="truncate" value="truncate">
-					<label for="truncate">Remove <i>x</i> Highest/Lowest...</label>
+					<label for="truncate">Remove <i class="dc-txt__i">x</i> Highest/Lowest...</label>
 					<span class="output-list--arg">
-						<i>x</i> = 
+						<i class="dc-txt__i">x</i> = 
 						<input type="number" name="truncate-val"
 						       id="truncate_val" class="config-input--num"
 						       value="1" min="1" max="499" step="1"
@@ -192,11 +193,11 @@
 						       aria-label="Amount to Remove (Highest and Lowest)" required="false">
 					</span></li>
 				
-				<li class="config__li--check">
+				<li class="dc-config__li--check">
 					<input type="checkbox" name="output-list" id="historylog" value="historylog" checked>
 					<label for="historylog">Rolling History Log...</label>
 					<span class="output-list--arg">
-						<i>Length</i> = 
+						<i class="dc-txt__i">Length</i> = 
 						<input type="number" name="history-val"
 						       id="history_val" class="config-input--num"
 						       value="5" min="1" max="50" step="1"
@@ -205,40 +206,43 @@
 					</span></li>
 			</ul>
 			
-			<button type="button" id="refresh" class="config__btn">Refresh Results/History</button>
-			<button type="button" id="history-clear" class="config__btn">Clear History</button>
-			<button type="reset" id="reset-config" class="config__btn">Reset Config</button>
-			<p class="config_valid-error clear-both"></p>
-        </form>
+			<button type="button" id="refresh" class="dc-config__btn">Refresh Results/History</button>
+			<button type="button" id="history-clear" class="dc-config__btn">Clear History</button>
+			<button type="reset" id="reset-config" class="dc-config__btn">Reset Config</button>
+			<p class="dc-config__valid-error clear-both"></p>
+		</form>
         
-    </section>
+	</section>
     
-    <section id="about">
-        <h2 class="accordion__bar">About</h2>
-        <p>Forgot or lost your dice? You can still keep rolling, thanks to Dice Chucker.</p>
-        
-        <h3>Just Input the Following:</h3>
-        <ol>
-            <li><strong>How many Dice</strong> you want to roll,
-                <br>up to 999</li>
-            <li><strong>How many Sides</strong> the dice have,
-                <br>up to 9999</li>
-            <li><strong>Total Modifier</strong> to add or subtract,
-                <br>up to +/-99999</li>
-            <li>Push the <strong>ROLL</strong> button</li>
-        </ol>
-        <p>Dice Chucker will generate random whole number results (from 1 to... a whole lot) produced by functions written in Javascript.</p>
-        
-        <h3>Roll Results and History</h3>
-        <p>By default, Dice Chucker shows three different aspects of your roll. You see the input values, the sum total of the dice roll, and a list of each roll from Highest to Lowest. Plus, the History will track the last 5 rolls, with most recent at the top.</p>
-        
-        <h3>Configuration</h3>
-        <p>Customize how your results are shown. Besides the default settings, you can also show the results sorted from low to high or in the order they were rolled, and also input variables to cull just the highest rolls, lowest rolls, or truncated sets (dropping the highest and lowest, Olympic Scoring style). The history can be set to show up to 50 results as well.</p>
-        
-        <h3>Creator and Code</h3>
-        <p>Dice Chucker was created by A. Alex Smith. A graphic and web designer, Alex started working on his developer foo. He wrote a javascript routine for random number generation and decided to spin it into this fully fledged front-end project. He wrote all the <b>HTML</b>, <b>CSS</b>, <b>Javascript</b>, and <b>JQuery</b> you see here.</p>
+	<section id="dc-about" class="dc-panel__about">
+		<h2 class="dc-panel__title accordion__bar">About</h2>
+		
+		<p class="dc-panel__p">Forgot or lost your dice? You can still keep rolling, thanks to Dice Chucker.</p>
+		
+		<h3 class="dc-panel__subtitle">Just Input the Following:</h3>
+		<ol class="dc-panel__ol">
+			<li class="dc-panel__litem"><strong class="dc-txt__strong">How many Dice</strong> you want to roll,
+			    <br>up to 999</li>
+			<li class="dc-panel__litem"><strong class="dc-txt__strong">How many Sides</strong> the dice have,
+			    <br>up to 9999</li>
+			<li class="dc-panel__litem"><strong class="dc-txt__strong">Total Modifier</strong> to add or subtract,
+			    <br>up to +/-99999</li>
+			<li class="dc-panel__litem">Push the <strong class="dc-txt__strong">ROLL</strong> button</li>
+		</ol>
+		<p class="dc-panel__p">Dice Chucker will generate random whole number results (from 1 to... a whole lot) produced by functions written in Javascript.</p>
+		
+		<h3 class="dc-panel__subtitle">Roll Results and History</h3>
+		<p class="dc-panel__p">By default, Dice Chucker shows three different aspects of your roll. You see the input values, the sum total of the dice roll, and a list of each roll from Highest to Lowest. Plus, the History will track the last 5 rolls, with most recent at the top.</p>
+		
+		<h3 class="dc-panel__subtitle">Configuration</h3>
+		<p class="dc-panel__p">Customize how your results are shown. Besides the default settings, you can also show the results sorted from low to high or in the order they were rolled, and also input variables to cull just the highest rolls, lowest rolls, or truncated sets (dropping the highest and lowest, Olympic Scoring style). The history can be set to show up to 50 results as well.</p>
+		
+		<h3 class="dc-panel__subtitle">Creator and Code</h3>
+		<p class="dc-panel__p">Dice Chucker was created by A. Alex Smith. A graphic and web designer, Alex started working on his developer foo. He wrote a javascript routine for random number generation and decided to spin it into this fully fledged front-end project. He wrote all the <b class="dc-txt__b">HTML</b>, <b class="dc-txt__b">CSS</b>, <b class="dc-txt__b">Javascript</b>, and <b class="dc-txt__b">jQuery</b> you see here.</p>
     	
-    </section>
+	</section>
+	
+	<footer class="dc-footer">&copy; 2015. <a href="http://www.aalexsmith.com">A. Alex Smith</a></footer>
     
 </div>
 
