@@ -15,23 +15,32 @@ table { border-collapse: collapse; border-spacing: 0; }
 
 
 /* FONT Declarations ---------*/
-body {
+.dc-wrapper {
 	font-family: 'Cuprum', sans-serif;
 	font-weight: 400;
 }
 
-b, strong {
+.dc-txt__b,
+.dc-txt__strong {
 	font-weight: 700;
 }
 
-em, i {
+.dc-txt__em,
+.dc-txt__i {
 	font-style: italic;
 }
 
-button, 
-h1, h2, h3, h4, h5, h6, 
-th, 
-.config_valid-error, .input_valid-error {
+.dc-button--roll,
+.dc-config__btn,
+.dc-config__valid-error,
+.dc-header__title,
+.dc-history__th,
+.dc-input__valid-error,
+.dc-panel__title,
+.dc-panel__subtitle,
+.dc-results__th,
+.dc-roll-input__minus,
+.dc-roll-input__plus {
 	font-family: 'Signika', sans-serif;
 	font-weight: 600;
 }
@@ -40,7 +49,8 @@ th,
 
 /*Color Scheme Index ----------
 ----HIGHLIGHT GREEN:    #BADA55
-		background-color    [ button:active, ::selection, header, th, 
+    background-color    [ button:active, ::selection, .dc-header,
+                          .dc-results__th, .dc-history__th,
                           .input-set, .tr--odd ];
     box-shadow          [ input:focus ];
 ----
@@ -50,16 +60,19 @@ th,
                           .input_valid-error ];
 ----
     BLACK:              #000000
-    border-color        [ header, section, .minus, .plus ];
+    border-color        [ .dc-header, section[class^="dc-panel__"], .dc-roll-input__minus, .dc-roll-input__plus ];
 ----
     DARK GREY:          #333333
-    color               [ body, button, input ];
+    color               [ .dc-wrapper, .dc-btn, input ];
 ----
     MIDDLE GREY:        #888888
-    background-color    [ .minus:active, .plus:active, 
+    background-color    [ .dc-roll-input__minus:active, .dc-roll-input__plus:active, 
                           .accordion__bar:hover::after ];
-    border-color        [ button, h1, h2, h3, h4, h5, h6, input,
-                          table, tbody, td, thead, th, tr,
+    border-color        [ button, .dc-header__title, .dc-panel__subtitle, .dc-panel__title, input,
+                          .dc-history__table, .dc-history__tbody, .dc-history__td,
+                          .dc-history__th, .dc-history__thead, .dc-history__tr,
+                          .dc-results__table, .dc-results__tbody, .dc-results__td,
+                          .dc-results__th, .dc-results__thead, .dc-results__tr,
                           .accordion__bar::after ];
     color               [ .accordion__bar:active::after ];
 ----
@@ -71,19 +84,18 @@ th,
 ----
     WHITE:              #FFFFFF
     background-color    [ .accordion__bar:active::after, 
-                          .minus, .plus ];
+                          .dc-roll-input__minus, .dc-roll-input__plus ];
     color               [ .accordion__bar:hover::after, 
-                          .minus:active, .plus:active ];
+                          .dc-roll-input__minus:active, .dc-roll-input__plus:active ];
 -------------------------------*/
 
 
 
-/*ELEMENT Tags ----------------*/
-body { 
+.dc-wrapper { 
 	color: #333333;
 }
 
-button {
+.dc-btn {
 	background: none;
 	border-color: #888888;
 	color: #333333;
@@ -98,23 +110,25 @@ button:active {
 	background-color: #BADA55;
 }
 
-form {
+.dc-config__form {
 	margin: 10px;
 }
 
-h1, h2, h3 {
+.dc-header__title,
+.dc-panel__subtitle,
+.dc-panel__title {
 	border-color: #888888;
 	border-style: outset;
 }
 
-h1 {
+.dc-header__title {
 	border-width: 5px 0;
 	font-size: 1.7em;
 	line-height: 1em;
 	padding: 0.1em 0;
 }
 
-h2 {
+.dc-panel__title {
 	border-width: 3px 0;
 	font-size: 1.4em;
 	letter-spacing: 0.1em;
@@ -123,20 +137,12 @@ h2 {
 	padding: 0 0.5em;
 }
 
-h3 {
+.dc-panel__subtitle {
 	border-width: 2px 0;
 	font-size: 1.2em;
 	line-height: 1.3em;
 	margin-bottom: 0.5em;
 	padding: 0 0.5em 0 1.25em;
-}
-
-header {
-	background-color: #BADA55;
-}
-header, section {
-	border: solid 1px #000000;
-	padding: 0.75em;
 }
 
 input {
@@ -158,16 +164,14 @@ input:focus {
 	box-shadow: 0 0 3px 2px #BADA55;
 }
 
-li {
+.dc-config__li--check, .dc-panel__litem {
 	margin: 0 0 0.25em;
 }
 
-ol {
-	list-style-type: decimal;
-	margin: 0 1em 0.5em 2em;
-}
-
-p {
+/*paragraph styling*/
+.dc-panel__p,
+.dc-input__valid-error,
+.dc-config__valid-error {
 	text-indent: 1em;
 	line-height: 1.4em;
 	margin: 0 0.5em 0.5em;
@@ -177,32 +181,40 @@ p {
 	background-color: #BADA55;
 }
 
-table, tbody, thead, tr, th, td {
+table, tbody, thead, tr,
+.dc-history__td, .dc-history__th,
+.dc-results__td, .dc-results__th {
 	border: solid 2px #888888;
 }
-td {
+.dc-history__td, .dc-results__td {
 	border-style: dotted;
 }
-td, th, tr {
+.dc-history__td, .dc-history__th,
+.dc-results__td, .dc-results__th,
+tr {
 	border-width: 1px;
 }
 
-td, th {
+.dc-history__td, .dc-history__th,
+.dc-results__td, .dc-results__th {
 	min-width: 4em;
 	padding: 0.25em;
 }
 
-th {
+.dc-history__th,
+.dc-results__th {
 	background-color: #BADA55;
 }
 
-ul {
+.dc-config__ul {
 	margin: 0 1em 0.5em 2.5em;
 }
 
+.dc-panel__ol {
+	list-style-type: decimal;
+	margin: 0 1em 0.5em 3em;
+}
 
-
-/*CLASS Tags ------------------*/
 .accordion__bar {
 	cursor: pointer;
 }
@@ -231,6 +243,10 @@ ul {
 .accordion__bar:active::after {
 	background-color: #FFFFFF;
 	color: #888888;
+}
+
+.accordion__bar--closed {
+	margin-bottom: 0;
 }
 .accordion__bar--closed::after {
 	content: "+";
@@ -267,11 +283,21 @@ ul {
 	color: #FF5555;
 }
 
+.dc-header {
+	background-color: #BADA55;
+}
+
+.dc-header,
+section[class^="dc-panel"] {
+	border: solid 1px #000000;
+	padding: 1em;
+}
+
 .hidden {
 	display: none;
 }
 
-.input-set {
+.dc-input-set {
 	background-color: #BADA55;
 	float: left;
 	padding: 5px;
@@ -286,7 +312,7 @@ ul {
 	text-align: center;
 }
 
-.input_valid-error {
+.dc-input__valid-error {
 	color: #FF5555;
 }
 
@@ -295,7 +321,7 @@ ul {
 	color: #FF5555;
 }
 
-.minus, .plus {
+.dc-roll-input__minus, .dc-roll-input__plus {
 	background-color: #FFFFFF;
 	border: solid 1px #000000;
 	display: inline-block;
@@ -305,20 +331,20 @@ ul {
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	right: 4px;
+	right: 2px;
 	text-align: center;
 	width: 19px;
 }
-.minus {
+.dc-roll-input__minus {
 	bottom: 5px;
 }
-.plus {
+.dc-roll-input__plus {
 	bottom: 26px;
 }
-.minus:hover, .plus:hover {
+.dc-roll-input__minus:hover, .dc-roll-input__plus:hover {
 	cursor: pointer;
 }
-.minus:active, .plus:active {
+.dc-roll-input__minus:active, .dc-roll-input__plus:active {
 	background-color: #888888;
 	color: #FFFFFF;
 }
@@ -329,7 +355,7 @@ ul {
 	text-indent: 0;
 }
 
-.results__th-lbl {
+.dc-results__th {
 	border-width: 1px 2px;
 	border-style: solid;
 	text-align: right;
@@ -338,9 +364,10 @@ ul {
 .roll-input {
 	display: inline-block;
 	font-size: 1.4em;
-	height: 40px;
+	height: 36px;
+	padding: 1px;
 	text-align: right;
-	width: 50px;
+	width: 48px;
 }
 
 .scroll-x {
@@ -351,12 +378,10 @@ ul {
 	background-color: #BADA55;
 }
 
-/*ID Tags -----------------------*/
-/*#wrapper {
-	width: 320px; /*phone*/
-}*/
-
-
 
 /*Media Queries -----------------*/
 /*pending*/
+
+.dc-wrapper {
+	width: 100%;
+}
