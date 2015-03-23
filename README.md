@@ -51,3 +51,18 @@ All the rigging between the html interface and the diceRoll() function. JQuery f
   * Change Events - show/hide specific results based on configuration checkbox states
 * Dynamic generation/updating of History table and Results data
 * Validation/Error messages
+
+##Version History
+###1.0:
+Supplied in initial set of commits and documentation on Github. Fully functional app, but still with some important things on the roadmap.
+
+###1.5:
+Committed 03/23/15.
+* **diceChucker_app.js** -- condensed global variables into a single multi-dimensional object variable called *dcApp*. Contains *newInput* object (values to feed a new roll), *config* object (settings to determine results/history displays), *errors* object (with boolean flags and message content), the *newRoll* object, and the *historyStorage* array. Namespaced most functions more distinctly with a 'dc_' prefix. Changed various jQuery selectors to reflect the updates to HTML.
+* **index.html** -- Mostly implemented BEM methodology. Majority of tags have class assignments now, for the most part have been namespaces with a 'dc-' prefix.
+* **style.css** -- Mostly implemented BEM methodology. Updated stylesheets to target the class changes and additions with a 'dc-' prefix. Some refactoring and other adjustments still pending.
+
+##Roadmap
+* Finish BEM implementation
+* Refine general styling
+* Responsive optimization
