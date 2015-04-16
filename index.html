@@ -2,6 +2,10 @@
 <html>
 <head>
 	<title>Dice Chucker</title>
+	<meta name="description" content="A dice roll simulator. Input how many dice, how many sides, and an optional modifier, then roll your results. Complete with several tracking options and a history log.">
+	
+	<!-- Mobile viewport optimized: h5bp.com/viewport -->
+	<meta name="viewport" content="width=device-width">
 	
 	<!-- Stylesheets: Fonts from google, Dice Chucker app css -->
 	<link href='http://fonts.googleapis.com/css?family=Signika:600|Cuprum:400,700,400italic' 
@@ -25,35 +29,38 @@
 		
 	</header>
 	
+	
+	<div class="dc-container">
+	
 	<div id="dc-debug" class="dc-debug hidden">Debug</div>
 	
-	<section id="dc-roll-input" class="dc-panel__roll-input">
+	<section id="dc-roll-input" class="dc-panel dc-panel__roll-input">
 		<h2 class="dc-panel__title accordion__bar">Input</h2>
 		
-		<div class="dc-input-set">
-			<label class="input-set__lbl" for="input-qty_val">Quantity</label>
-			<input id="input-qty_val" class="roll-input" type="number" name="qty" 
+		<div class="dc-roll-input__set">
+			<label class="dc-roll-input__lbl" for="input-qty_val">Quantity</label>
+			<input id="input-qty_val" class="dc-panel__input dc-roll-input__input" type="number" name="qty" 
 			       value="1" min="1" max="999" step="number" data-errormsg="*Invalid Quantity. " required>
-			<button id="input-qty_minus" class="dc-btn dc-roll-input__minus" data-parent="input-qty_val">-</button>
-			<button id="input-qty_plus" class="dc-btn dc-roll-input__plus" data-parent="input-qty_val">+</button></div
-		><div class="dc-input-set">
-	    	<label class="input-set__lbl" for="input-sides_val">Sides</label>
-			<input id="input-sides_val" class="roll-input" type="number" name="sides" 
+			<button id="input-qty_minus" class="dc-btn dc-roll-input__btn--minus" data-parent="input-qty_val">-</button>
+			<button id="input-qty_plus" class="dc-btn dc-roll-input__btn--plus" data-parent="input-qty_val">+</button></div
+		><div class="dc-roll-input__set">
+	    		<label class="dc-roll-input__lbl" for="input-sides_val">Sides</label>
+			<input id="input-sides_val" class="dc-panel__input dc-roll-input__input" type="number" name="sides" 
 			       value="6" min="2" max="9999" step="number" data-errormsg="*Invalid Sides Value. "required>
-			<button id="input-sides_minus" class="dc-btn dc-roll-input__minus" data-parent="input-sides_val">-</button>
-			<button id="input-sides_plus" class="dc-btn dc-roll-input__plus" data-parent="input-sides_val">+</button></div
-		><div class="dc-input-set">
-			<label class="input-set__lbl" for="input-mod_val">Modifier</label>
-			<input id="input-mod_val" class="roll-input" type="number" name="mod" 
+			<button id="input-sides_minus" class="dc-btn dc-roll-input__btn--minus" data-parent="input-sides_val">-</button>
+			<button id="input-sides_plus" class="dc-btn dc-roll-input__btn--plus" data-parent="input-sides_val">+</button></div
+		><div class="dc-roll-input__set">
+			<label class="dc-roll-input__lbl" for="input-mod_val">Modifier</label>
+			<input id="input-mod_val" class="dc-panel__input dc-roll-input__input" type="number" name="mod" 
 			       value="0" min="-99999" max="99999" step="number" data-errormsg="*Invalid Modifier. ">
-			<button id="input-mod_minus" class="dc-btn dc-roll-input__minus" data-parent="input-mod_val">-</button>
-			<button id="input-mod_plus" class="dc-btn dc-roll-input__plus" data-parent="input-mod_val">+</button></div
-		><button id="dc-roll-input__btn" class="dc-button--roll">ROLL</button>
-		<p class="dc-input__valid-error clear-both"></p>
+			<button id="input-mod_minus" class="dc-btn dc-roll-input__btn--minus" data-parent="input-mod_val">-</button>
+			<button id="input-mod_plus" class="dc-btn dc-roll-input__btn--plus" data-parent="input-mod_val">+</button></div
+		><button id="dc-roll-input__btn--roll" class="dc-btn dc-roll-input__btn--roll">ROLL</button>
+		<p class="dc-roll-input__valid-error clear-both"></p>
 		
 	</section>
   
-	<section id="dc-results" class="dc-panel__results">
+	<section id="dc-results" class="dc-panel dc-panel__results">
 		<h2 class="dc-panel__title accordion__bar">Roll Results</h2>
 		
 		<table class="dc-results__table">
@@ -104,7 +111,7 @@
 		
 	</section>
 	
-	<section id="dc-history" class="dc-panel__history overflow scroll-x">
+	<section id="dc-history" class="dc-panel dc-panel__history overflow scroll-x">
 		<h2 class="dc-panel__title accordion__bar">History</h2>
 		
 		<table class="dc-history__table">
@@ -122,7 +129,7 @@
 			
 			<!-- tbody: up to 50 rows of data, reverse chronological    -->
 			<tbody class="dc-history__tbody">
-				<tr class="dc-history__tr tr--even">
+				<tr class="dc-history__tr dc-history__tr--even">
 					<td class="dc-history__td">XdY+Z</td>
 					<td class="dc-history__td">N</td>
 					<td class="dc-history__td">A,B,C</td>
@@ -132,89 +139,89 @@
         
 	</section>
 	
-	<section id="dc-config" class="dc-panel__config">
+	<section id="dc-config" class="dc-panel dc-panel__config">
 		<h2 class="dc-panel__title accordion__bar">Configuration</h2>
         
 		<form class="dc-config__form" action="">
 			<ul class="dc-config__ul">
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="sum" value="sum" checked>
 					<label for="sum">Sum Total</label></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="mean" value="mean">
 					<label for="mean">Average for Roll</label></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="sorted-high" value="sorted-high" checked>
 					<label for="sorted-high">List High to Low</label></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="sorted-low" value="sorted-low">
 					<label for="sorted-low">List Low to High</label></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="series" value="series">
 					<label for="series">List of Rolls in Series</label></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="skim" value="skim">
 					<label for="skim">Highest <i class="dc-txt__i">x</i> Rolls...</label>
-					<span class="output-list--arg">
+					<span class="dc-config__output-mod">
 						<i class="dc-txt__i">x</i> = 
 						<input type="number" name="skim-val"
-						       id="skim_val" class="config-input--num"
+						       id="skim_val" class="dc-panel__input dc-config-input--num"
 						       value="1" min="1" max="999" step="1"
 						       data-errormsg="*Invalid Skim Value. "
 						       aria-label="Amount to Keep (Highest)" required="false">
 					</span></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="dredge" value="dredge">
 					<label for="dredge">Lowest <i class="dc-txt__i">x</i> Rolls...</label>
-					<span class="output-list--arg">
+					<span class="dc-config__output-mod">
 						<i class="dc-txt__i">x</i> = 
 						<input type="number" name="dredge-val"
-						       id="dredge_val" class="config-input--num"
+						       id="dredge_val" class="dc-panel__input dc-config-input--num"
 						       value="1" min="1" max="999" step="1"
 						       data-errormsg="*Invalid Dredge Value. "
 						       aria-label="Amount to Keep (Lowest)" required="false">
 					</span></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="truncate" value="truncate">
 					<label for="truncate">Remove <i class="dc-txt__i">x</i> Highest/Lowest...</label>
-					<span class="output-list--arg">
+					<span class="dc-config__output-mod">
 						<i class="dc-txt__i">x</i> = 
 						<input type="number" name="truncate-val"
-						       id="truncate_val" class="config-input--num"
+						       id="truncate_val" class="dc-panel__input dc-config-input--num"
 						       value="1" min="1" max="499" step="1"
 						       data-errormsg="*Invalid Truncate Value. "
 						       aria-label="Amount to Remove (Highest and Lowest)" required="false">
 					</span></li>
 				
-				<li class="dc-config__li--check">
+				<li class="dc-config__litem">
 					<input type="checkbox" name="output-list" id="historylog" value="historylog" checked>
 					<label for="historylog">Rolling History Log...</label>
-					<span class="output-list--arg">
+					<span class="dc-config__output-mod">
 						<i class="dc-txt__i">Length</i> = 
 						<input type="number" name="history-val"
-						       id="history_val" class="config-input--num"
+						       id="history_val" class="dc-panel__input dc-config-input--num"
 						       value="5" min="1" max="50" step="1"
 						       data-errormsg="*Invalid History Log Value. "
 						       aria-label="Length of Rolling History Log" required="true">
 					</span></li>
 			</ul>
 			
-			<button type="button" id="refresh" class="dc-config__btn">Refresh Results/History</button>
-			<button type="button" id="history-clear" class="dc-config__btn">Clear History</button>
-			<button type="reset" id="reset-config" class="dc-config__btn">Reset Config</button>
+			<button type="button" id="refresh" class="dc-btn dc-config__btn">Refresh Results/History</button>
+			<button type="button" id="history-clear" class="dc-btn dc-config__btn">Clear History</button>
+			<button type="reset" id="reset-config" class="dc-btn dc-config__btn">Reset Config</button>
 			<p class="dc-config__valid-error clear-both"></p>
 		</form>
         
 	</section>
     
-	<section id="dc-about" class="dc-panel__about">
+	<section id="dc-about" class="dc-panel dc-panel__about">
 		<h2 class="dc-panel__title accordion__bar">About</h2>
 		
 		<p class="dc-panel__p">Forgot or lost your dice? You can still keep rolling, thanks to Dice Chucker.</p>
@@ -238,11 +245,13 @@
 		<p class="dc-panel__p">Customize how your results are shown. Besides the default settings, you can also show the results sorted from low to high or in the order they were rolled, and also input variables to cull just the highest rolls, lowest rolls, or truncated sets (dropping the highest and lowest, Olympic Scoring style). The history can be set to show up to 50 results as well.</p>
 		
 		<h3 class="dc-panel__subtitle">Creator and Code</h3>
-		<p class="dc-panel__p">Dice Chucker was created by A. Alex Smith. A graphic and web designer, Alex started working on his developer foo. He wrote a javascript routine for random number generation and decided to spin it into this fully fledged front-end project. He wrote all the <b class="dc-txt__b">HTML</b>, <b class="dc-txt__b">CSS</b>, <b class="dc-txt__b">Javascript</b>, and <b class="dc-txt__b">jQuery</b> you see here.</p>
+		<p class="dc-panel__p">Dice Chucker was created by A. Alex Smith. A graphic and web designer, Alex started working on his developer foo. He wrote a javascript routine for random number generation and decided to spin it into this fully fledged front-end project. He wrote all the <b class="dc-txt__b">HTML</b>, <b class="dc-txt__b">CSS</b>, <b class="dc-txt__b">Javascript</b>, and <b class="dc-txt__b">jQuery</b> you see here. Project files <a class="dc-txt__link" href="https://github.com/aasmith64/dice-chucker">available on GitHub</a> (under Apache License 2.0).</p>
     	
 	</section>
 	
-	<footer class="dc-footer">&copy; 2015. <a href="http://www.aalexsmith.com">A. Alex Smith</a></footer>
+	</div>
+	
+	<footer class="dc-footer">&copy; 2015. <a class="dc-footer__link" href="http://www.aalexsmith.com">A. Alex Smith</a></footer>
     
 </div>
 
