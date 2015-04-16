@@ -1,7 +1,7 @@
 //Dice Chucker app rigging
 
 //declare app object with defaults
-//values updated by ('#dc-roll-input__btn').click(),
+//values updated by ('#dc-roll-input__btn--roll').click(),
 //and by keyup 'enter' events from the roll-input inputs
 
 var dcApp                    = {}; //namespace object
@@ -9,7 +9,7 @@ var dcApp                    = {}; //namespace object
     dcApp.config             = {}; //configuration settings for results/history display
     dcApp.errors             = {}; //error validation storage
     dcApp.newRoll            = {}; //will be new diceRoll() object
-    dcApp.historyStorage     = []; //store up to 50 dcApp.newRoll 's
+    dcApp.historyStorage     = []; //store up to 50 dcApp.newRoll objects
 
 //default roll inputs
     dcApp.newInput.qty       = 1;
@@ -75,31 +75,30 @@ function dc_validateInputs() {
 
 //generate valid roll and add it to dcApp.historyStorage
 function chuckDice() {
-    if (dcApp.errors.RollFlag) { //log error
-        $('.dc-input__valid-error').text(dcApp.errors.RollMsg);
-        
-    } else { // (!dcApp.errors.RollFlag)
-        $('.dc-input__valid-error').text(""); //clear error log
-        
-        //get and store current input vals
-        dcApp.newInput.qty   = parseInt($('#input-qty_val')  .val());
-        dcApp.newInput.sides = parseInt($('#input-sides_val').val());
-        dcApp.newInput.mod   = parseInt($('#input-mod_val')  .val());
-        
-        //generate roll, also put it in dcApp.historyStorage
-        dcApp.newRoll = new diceRoll(dcApp.newInput.sides, dcApp.newInput.qty);
-        
-        dcApp.historyStorage.unshift([dcApp.newRoll, dcApp.newInput.mod]);
-        if (dcApp.historyStorage.length > 50) {
-            dcApp.historyStorage.pop();   //enforce max limit for Log
-        }
-    }
+	if (dcApp.errors.RollFlag) { //log error
+		$('.dc-roll-input__valid-error').text(dcApp.errors.RollMsg);
+	} else { // (!dcApp.errors.RollFlag)
+		$('.dc-roll-input__valid-error').text(""); //clear error log
+		
+		//get and store current input vals
+		dcApp.newInput.qty   = parseInt($('#input-qty_val')  .val());
+		dcApp.newInput.sides = parseInt($('#input-sides_val').val());
+		dcApp.newInput.mod   = parseInt($('#input-mod_val')  .val());
+		
+		//generate roll, also put it in dcApp.historyStorage
+		dcApp.newRoll = new diceRoll(dcApp.newInput.sides, dcApp.newInput.qty);
+		
+		dcApp.historyStorage.unshift([dcApp.newRoll, dcApp.newInput.mod]);
+		if (dcApp.historyStorage.length > 50) {
+			dcApp.historyStorage.pop();   //enforce max limit for Log
+		}
+	}
 }
 
 //when called, update the Roll Results table
 function dc_updateResults() {
 	if (dcApp.errors.ConfigFlag) { //log error
-			$('.dc-config__valid-error').text(dcApp.errors.ConfigMsg);
+		$('.dc-config__valid-error').text(dcApp.errors.ConfigMsg);
 	} else { // (!dcApp.errors.ConfigFlag)
 		$('.dc-config__valid-error').text(""); //clear error log
 		
@@ -257,9 +256,9 @@ function dc_updateHistory() {
 				
 				//add row
 				if (i % 2 === 0) { //apply class for evens
-					histTableContent += '<tr class="dc-history__tr tr--even">';
+					histTableContent += '<tr class="dc-history__tr dc-history__tr--even">';
 				} else { //or odds
-					histTableContent += '<tr class="dc-history__tr tr--odd">';
+					histTableContent += '<tr class="dc-history__tr dc-history__tr--odd">';
 				}
 				
 				//create cells for Input and each checked config item - run as functions
@@ -289,7 +288,7 @@ function dc_updateHistory() {
 //.click() EVENTS
 
 //grab inputs and execute dcApp.newRoll; update results; update history
-$('#dc-roll-input__btn').click(function () {
+$('#dc-roll-input__btn--roll').click(function () {
 	dc_validateInputs(); //check inputs
 	chuckDice();      //run diceRoll and store
 	dc_updateResults();  //run updates
@@ -299,8 +298,10 @@ $('#dc-roll-input__btn').click(function () {
 //rig increment/decrement buttons for roll inputs
 //qty +/-, sides +/-, mod +/-
 $('[data-parent]').click(function () {
+	var $validError = $('.dc-roll-input__valid-error');
+	
 	//clear error msg
-	$('.dc-input__valid-error').empty();
+	$validError.empty();
 	
 	//grab input element associated with button, value of
 	var dataParent = $('#' + $(this).attr("data-parent"));
@@ -308,39 +309,39 @@ $('[data-parent]').click(function () {
 	
 	if (inputVal != inputVal) { //NaN validation
 		inputVal = "";
-		$('.dc-input__valid-error').text("*Not a number.");
+		$validError.text("*Not a number.");
 	}
 	
 	//increment or decrement the value
-	if ($(this).hasClass("dc-roll-input__plus")) {
+	if ($(this).hasClass("dc-roll-input__btn--plus")) {
 		inputVal++;
-	} else if ($(this).hasClass("dc-roll-input__minus")) {
+	} else if ($(this).hasClass("dc-roll-input__btn--minus")) {
 		inputVal--;
 	}
 	//enforce min/max qty/sides/mod and print error msgs
 	if ( (inputVal < 2) && (dataParent.is("[id*=-sides_]")) ) {
 		inputVal = 2;
-		$('.dc-input__valid-error').text("*Minimum 2 sides.");
+		$validError.text("*Minimum 2 sides.");
 	}
 	if ( (inputVal < 1) && (dataParent.is("[id*=-qty_]")) ) {
 		inputVal = 1;
-		$('.dc-input__valid-error').text("*Minimum 1 dice.");
+		$validError.text("*Minimum 1 dice.");
 	}
 	if ( (inputVal < -99999) && (dataParent.is("[id*=-mod_]")) ) {
 		inputVal = -99999;
-		$('.dc-input__valid-error').text("*Maximum Modifier: -99,999.");
+		$validError.text("*Maximum Modifier: -99,999.");
 	}    
 	if ( (inputVal > 9999) && (dataParent.is("[id*=-sides_]")) ) {
 		inputVal = 9999;
-		$('.dc-input__valid-error').text("*Maximum 9,999 sides.");
+		$validError.text("*Maximum 9,999 sides.");
 	}
 	if ( (inputVal > 999) && (dataParent.is("[id*=-qty_]")) ) {
 		inputVal = 999;
-		$('.dc-input__valid-error').text("*Maximum 999 dice.");
+		$validError.text("*Maximum 999 dice.");
 	}
 	if ( (inputVal > 99999) && (dataParent.is("[id*=-mod_]")) ) {
 		inputVal = 99999;
-		$('.dc-input__valid-error').text("*Maximum Modifier: 99,999.");
+		$validError.text("*Maximum Modifier: 99,999.");
 	}
 	
 	//update new value to input field
